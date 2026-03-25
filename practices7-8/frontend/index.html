@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0b0f19;
+            color: #e7eaf3;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: rgba(99, 102, 241, 0.18);
+            border: 1px solid rgba(99, 102, 241, 0.55);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        button:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            word-break: break-all;
+        }
+        .token {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .user-info {
+            margin-top: 10px;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #4ade80;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab-button.active {
+            background: rgba(99, 102, 241, 0.18);
+            border-color: rgba(99, 102, 241, 0.55);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showTab('login')">Вход</button>
+            <button class="tab-button" onclick="showTab('register')">Регистрация</button>
+            <button class="tab-button" onclick="showTab('profile')">Профиль</button>
+        </div>
+
+        <!-- Вкладка входа -->
+        <div id="login-tab" class="tab-content active">
+            <h3>Вход</h3>
+            <input type="email" id="login-email" placeholder="Email" value="ivanova.v.d@mail.ru">
+            <input type="password" id="login-password" placeholder="Пароль" value="90475">
+            <button onclick="login()">Войти</button>
+        </div>
+
+        <!-- Вкладка регистрации -->
+        <div id="register-tab" class="tab-content">
+            <h3>Регистрация</h3>
+            <input type="email" id="register-email" placeholder="Email">
+            <input type="text" id="register-firstname" placeholder="Имя">
+            <input type="text" id="register-lastname" placeholder="Фамилия">
+            <input type="password" id="register-password" placeholder="Пароль">
+            <button onclick="register()">Зарегистрироваться</button>
+        </div>
+
+        <!-- Вкладка профиля -->
+        <div id="profile-tab" class="tab-content">
+            <h3>Профиль</h3>
+            <div id="profile-info"></div>
+            <button onclick="getProfile()" style="margin-top: 10px;">Обновить</button>
+        </div>
+
+        <!-- Результат -->
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        let currentToken = null;
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.tab-button')[0].classList.add('active');
+                document.getElementById('login-tab').classList.add('active');
+            } else if (tab === 'register') {
+                document.querySelectorAll('.tab-button')[1].classList.add('active');
+                document.getElementById('register-tab').classList.add('active');
+            } else if (tab === 'profile') {
+                document.querySelectorAll('.tab-button')[2].classList.add('active');
+                document.getElementById('profile-tab').classList.add('active');
+                if (currentToken) getProfile();
+            }
+        }
+
+        function showResult(data, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<pre class="${isError ? 'error' : 'success'}">${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        async function register() {
+            const email = document.getElementById('register-email').value;
+            const firstName = document.getElementById('register-firstname').value;
+            const lastName = document.getElementById('register-lastname').value;
+            const password = document.getElementById('register-password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, firstName, lastName, password })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showResult(data);
+                    alert('Регистрация успешна! Теперь можно войти.');
+                    showTab('login');
+                } else {
+                    showResult(data, true);
+                }
+            } catch (error) {
+                showResult({ error: error.message }, true);
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.accessToken;
+                    showResult({
+                        success: true,
+                        user: data.user,
+                        token: data.accessToken.substring(0, 20) + '...'
+                    });
+                    alert('Вход выполнен! Токен сохранён.');
+                    showTab('profile');
+                    getProfile();
+                } else {
+                    showResult(data, true);
+                }
+            } catch (error) {
+                showResult({ error: error.message }, true);
+            }
+        }
+
+        async function getProfile() {
+            if (!currentToken) {
+                showResult({ error: 'Сначала войдите в систему' }, true);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/me', {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('profile-info').innerHTML = `
+                        <div class="user-info">
+                            <p><strong>ID:</strong> ${data.id}</p>
+                            <p><strong>Email:</strong> ${data.email}</p>
+                            <p><strong>Имя:</strong> ${data.firstName}</p>
+                            <p><strong>Фамилия:</strong> ${data.lastName}</p>
+                        </div>
+                        <div class="token">
+                            <strong>Токен:</strong> ${currentToken}
+                        </div>
+                    `;
+                    showResult(data);
+                } else {
+                    showResult(data, true);
+                }
+            } catch (error) {
+                showResult({ error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>
