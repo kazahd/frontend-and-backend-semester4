@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Для Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Цвет темы для браузера -->
+    <meta name="theme-color" content="#555555">
+    
+    <!-- Для iOS (иконка на домашний экран) -->
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    
+    <!-- Для iOS (статус бар) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Обычная иконка вкладки -->
+    <link rel="icon" href="/icons/favicon.ico" sizes="16x16" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    
+    <title>Мои задачи</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            font-weight: normal;
+            border-bottom: 2px solid #999;
+            padding-bottom: 10px;
+        }
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        input:focus {
+            outline: none;
+            border-color: #888;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #777;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            background-color: #fff;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #999;
+            color: #333;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Мои задачи</h1>
+    <form id="task-form">
+        <input type="text" id="task-input" placeholder="Введите новую задачу" required>
+        <button type="submit">Добавить</button>
+    </form>
+    <ul id="tasks-list"></ul>
+
+    <script src="app.js"></script>
+</body>
+</html>
