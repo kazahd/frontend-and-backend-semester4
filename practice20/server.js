@@ -12,12 +12,12 @@ const counterSchema = new mongoose.Schema({
 const Counter = mongoose.model('Counter', counterSchema);
 
 const userSchema = new mongoose.Schema({
-  id: { type: Number, unique: true },  // Integer ID (вместо ObjectId)
+  id: { type: Number, unique: true },  
   first_name: { type: String, required: [true, 'First name is required'] },
   last_name: { type: String, required: [true, 'Last name is required'] },
   age: { type: Number, required: [true, 'Age is required'], min: 0 },
-  created_at: { type: Number },  // Unix timestamp (секунды)
-  updated_at: { type: Number }   // Unix timestamp (секунды)
+  created_at: { type: Number },  
+  updated_at: { type: Number }  
 });
 
 userSchema.pre('save', async function(next) {
