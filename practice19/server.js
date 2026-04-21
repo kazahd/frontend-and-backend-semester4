@@ -5,7 +5,6 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-// POST /api/users - создание пользователя
 app.post('/api/users', async (req, res) => {
   const { first_name, last_name, age } = req.body;
   try {
@@ -21,7 +20,6 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-// GET /api/users - получение всех пользователей
 app.get('/api/users', async (req, res) => {
   try {
     const result = await pool.query('SELECT id, first_name, last_name, age, created_at, updated_at FROM users ORDER BY id');
@@ -31,7 +29,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-// GET /api/users/:id - получение конкретного пользователя
 app.get('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -48,12 +45,10 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-// PATCH /api/users/:id - обновление пользователя
 app.patch('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, age } = req.body;
   
-  // Динамическое обновление только переданных полей
   const fields = [];
   const values = [];
   
@@ -93,7 +88,6 @@ app.patch('/api/users/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/users/:id - удаление пользователя
 app.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   try {

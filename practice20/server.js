@@ -5,14 +5,12 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-// ==================== Схема для автоинкремента Integer ID ====================
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
 });
 const Counter = mongoose.model('Counter', counterSchema);
 
-// ==================== Модель пользователя (строго по ТЗ) ====================
 const userSchema = new mongoose.Schema({
   id: { type: Number, unique: true },  // Integer ID (вместо ObjectId)
   first_name: { type: String, required: [true, 'First name is required'] },
@@ -22,7 +20,6 @@ const userSchema = new mongoose.Schema({
   updated_at: { type: Number }   // Unix timestamp (секунды)
 });
 
-// Middleware: автоинкремент ID и установка timestamps перед сохранением
 userSchema.pre('save', async function(next) {
   const now = Math.floor(Date.now() / 1000);
   
@@ -46,22 +43,18 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-// Middleware для findOneAndUpdate операций (PATCH)
 userSchema.pre('findOneAndUpdate', async function() {
   this.set({ updated_at: Math.floor(Date.now() / 1000) });
 });
 
 const User = mongoose.model('User', userSchema);
 
-// ==================== Подключение к MongoDB ====================
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// ==================== CRUD эндпоинты ====================
 
-// POST /api/users - создание пользователя
 app.post('/api/users', async (req, res) => {
   try {
     const { first_name, last_name, age } = req.body;
@@ -81,7 +74,6 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-// GET /api/users - получение всех пользователей
 app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find({}, { _id: 0, __v: 0 });
@@ -91,7 +83,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-// GET /api/users/:id - получение конкретного пользователя (по Integer ID)
 app.get('/api/users/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -109,7 +100,6 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-// PATCH /api/users/:id - обновление пользователя
 app.patch('/api/users/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -142,7 +132,6 @@ app.patch('/api/users/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/users/:id - удаление пользователя
 app.delete('/api/users/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -160,7 +149,6 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-// ==================== Запуск сервера ====================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
