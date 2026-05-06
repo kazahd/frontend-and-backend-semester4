@@ -1,0 +1,489 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5;
+  color: #333333;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Заголовок */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  border-bottom: 3px solid #e67e22;
+  display: inline-block;
+  width: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Навигация */
+.nav-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+}
+
+.nav-buttons button {
+  padding: 0.6rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  color: #666666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-buttons button.active {
+  background: #e67e22;
+  border-color: #e67e22;
+  color: white;
+}
+
+.nav-buttons button:hover {
+  background: #f0f0f0;
+  border-color: #cccccc;
+}
+
+.nav-buttons button.active:hover {
+  background: #d35400;
+  border-color: #d35400;
+}
+
+/* Формы */
+.form-container, .profile-container, .products-container, .users-container {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+h2, h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  border-left: 3px solid #e67e22;
+  padding-left: 0.75rem;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.3rem 0 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #333333;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+button {
+  padding: 0.6rem 1.25rem;
+  background: #e67e22;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #d35400;
+}
+
+button.cancel-btn {
+  background: #95a5a6;
+}
+
+button.cancel-btn:hover {
+  background: #7f8c8d;
+}
+
+/* Карточки товаров */
+.products-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.product-card {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: box-shadow 0.2s;
+}
+
+.product-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #d0d0d0;
+}
+
+.product-image {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  background: #f0f0f0;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-id {
+  font-size: 0.65rem;
+  color: #999999;
+  font-family: monospace;
+  background: #f0f0f0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.product-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  cursor: pointer;
+  color: #2c3e50;
+}
+
+.product-card h4:hover {
+  color: #e67e22;
+}
+
+.product-card p {
+  margin: 0.4rem 0;
+  color: #666666;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.product-card p strong {
+  color: #333333;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.card-buttons button {
+  flex: 1;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.edit-btn {
+  background: #3498db;
+}
+
+.edit-btn:hover {
+  background: #2980b9;
+}
+
+.delete-btn {
+  background: #e74c3c;
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+}
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.view-modal {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.modal-header h3 {
+  margin: 0;
+  border-left: none;
+  padding-left: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #999999;
+}
+
+.close-btn:hover {
+  background: #f0f0f0;
+  color: #333333;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.view-field {
+  margin-bottom: 0.75rem;
+  padding: 0.6rem;
+  background: #fafafa;
+  border-radius: 6px;
+  border-left: 2px solid #e67e22;
+}
+
+.view-field strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #999999;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.view-field span {
+  color: #333333;
+  font-size: 0.9rem;
+  word-break: break-word;
+}
+
+.view-price {
+  color: #e67e22;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.view-image {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.view-image img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  background: #fafafa;
+}
+
+/* Роли */
+.role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.role-user {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdef5;
+}
+
+.role-seller {
+  background: #fff3e0;
+  color: #e67e22;
+  border: 1px solid #ffe0b5;
+}
+
+.role-admin {
+  background: #ffebee;
+  color: #e74c3c;
+  border: 1px solid #ffcdd2;
+}
+
+/* Карточки пользователей */
+.users-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.user-card {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.user-id {
+  font-size: 0.65rem;
+  color: #999999;
+  font-family: monospace;
+}
+
+.user-card p {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: #666666;
+}
+
+.user-card p strong {
+  color: #333333;
+}
+
+.user-card .card-buttons {
+  margin-top: 0.5rem;
+}
+
+/* Профиль */
+.user-info {
+  background: #fafafa;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+}
+
+.user-info p {
+  margin: 0.4rem 0;
+}
+
+.tokens-info {
+  background: #fafafa;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.token-display {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border-left: 2px solid #e67e22;
+}
+
+.token-value {
+  font-size: 0.6rem;
+  word-break: break-all;
+  background: #ffffff;
+  padding: 0.4rem;
+  border-radius: 3px;
+  margin-top: 0.3rem;
+  font-family: monospace;
+  color: #666666;
+  border: 1px solid #e0e0e0;
+}
+
+/* Формы редактирования */
+.product-form, .user-form {
+  background: #fafafa;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .products-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-buttons button {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
