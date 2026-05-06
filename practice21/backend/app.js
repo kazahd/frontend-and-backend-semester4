@@ -31,7 +31,7 @@ let redisReady = false;
 
 redisClient.on('ready', () => {
     redisReady = true;
-    console.log('✅ Redis connected');
+    console.log('Redis connected');
 });
 
 redisClient.on('error', (err) => {
@@ -94,10 +94,10 @@ function cacheMiddleware(keyBuilder, ttl) {
             const key = keyBuilder(req);
             const cachedData = await redisClient.get(key);
             if (cachedData) {
-                console.log(`✅ Cache HIT: ${key}`);
+                console.log(`Cache HIT: ${key}`);
                 return res.json(JSON.parse(cachedData));
             }
-            console.log(`❌ Cache MISS: ${key}`);
+            console.log(`Cache MISS: ${key}`);
             req.cacheKey = key;
             req.cacheTTL = ttl;
             next();
@@ -112,7 +112,7 @@ async function saveToCache(key, data, ttl) {
     if (!redisReady || !key || !data) return;
     try {
         await redisClient.set(key, JSON.stringify(data), { EX: ttl });
-        console.log(`💾 Cache SAVED: ${key} (TTL: ${ttl}s)`);
+        console.log(`Cache SAVED: ${key} (TTL: ${ttl}s)`);
     } catch (err) {
         console.error('Cache save error:', err.message);
     }
@@ -125,7 +125,7 @@ async function invalidateUsersCache(userId = null) {
         if (userId) {
             await redisClient.del(`users:${userId}`);
         }
-        console.log(`🗑️ Cache INVALIDATED: users`);
+        console.log(`Cache INVALIDATED: users`);
     } catch (err) {
         console.error('Users cache invalidate error:', err.message);
     }
@@ -138,7 +138,7 @@ async function invalidateProductsCache(productId = null) {
         if (productId) {
             await redisClient.del(`products:${productId}`);
         }
-        console.log(`🗑️ Cache INVALIDATED: products`);
+        console.log(`Cache INVALIDATED: products`);
     } catch (err) {
         console.error('Products cache invalidate error:', err.message);
     }
