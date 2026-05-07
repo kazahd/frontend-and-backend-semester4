@@ -22,8 +22,8 @@ const PRODUCTS_CACHE_TTL = 600;
 const redisClient = redis.createClient({
     url: 'redis://localhost:6379',
     socket: {
-        keepAlive: false,           // Оключаем keep-alive (причина ECONNRESET)
-        reconnectStrategy: false    // Не переподключаемся автоматически
+        keepAlive: false,           // ECONNRESET
+        reconnectStrategy: false    
     }
 });
 
@@ -87,7 +87,7 @@ function findProductOr404(id, res) {
 function cacheMiddleware(keyBuilder, ttl) {
     return async (req, res, next) => {
         if (!redisReady) {
-            console.log('⚠️ Redis not ready, skipping cache');
+            console.log('Redis not ready, skipping cache');
             return next();
         }
         try {
@@ -144,7 +144,6 @@ async function invalidateProductsCache(productId = null) {
     }
 }
 
-// токены
 function generateAccessToken(user) {
     return jwt.sign(
         {
@@ -167,7 +166,6 @@ function generateRefreshToken(user) {
     );
 }
 
-// middleware
 function authMiddleware(req, res, next) {
     const header = req.headers.authorization || "";
     const [scheme, token] = header.split(" ");
@@ -199,7 +197,6 @@ function roleMiddleware(allowedRoles) {
     };
 }
 
-// swagger
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
@@ -247,8 +244,6 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// публичные маршруты
 
 app.post('/api/auth/register', async (req, res) => {
     const { email, firstName, lastName, password, role = 'user' } = req.body;
@@ -373,8 +368,7 @@ app.get('/api/auth/me', authMiddleware, (req, res) => {
     });
 });
 
-// пользователи (только admin)
-
+// пользователи (admin)
 app.get('/api/users', 
     authMiddleware, 
     roleMiddleware(['admin']),
@@ -432,7 +426,7 @@ app.put('/api/users/:id', authMiddleware, roleMiddleware(['admin']), async (req,
         user.role = role;
     }
 
-    await invalidateUsersCache(user.id);
+    await invalidateUsersCache(user.id); //инвалидация
 
     res.json({
         id: user.id,
@@ -455,7 +449,6 @@ app.delete('/api/users/:id', authMiddleware, roleMiddleware(['admin']), async (r
     res.status(204).send();
 });
 
-// товары
 
 app.post('/api/products', authMiddleware, roleMiddleware(['seller', 'admin']), async (req, res) => {
     const { title, category, description, price, imageUrl } = req.body;

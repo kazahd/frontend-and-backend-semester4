@@ -12,4 +12,4 @@ app.get("/health", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server 1 started on port ${PORT}`);
-});
+}); 
