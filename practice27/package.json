@@ -1,0 +1,14 @@
+{
+  "name": "rabbitmq-task-system",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "setup": "node setup-queues.js",
+    "producer": "node producer.js",
+    "consumer": "node consumer.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "express": "^4.18.2"
+  }
+}
